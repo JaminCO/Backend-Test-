@@ -46,7 +46,13 @@ class OrderCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save()
+
+    # def perform_create(self):
+    #     data = self.request.data
+    #     print(data)
+    #     new_order = Order.objects.create(user=self.request.user, products=data.products, quantity=data.quantity)
+    #     print("DATA: ",new_order)
 
 class OrderHistoryView(generics.ListAPIView):
     serializer_class = OrderSerializer

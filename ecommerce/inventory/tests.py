@@ -13,6 +13,7 @@ class UserTests(APITestCase):
         data = {'username': 'testuser', 'password': 'testpassword', 'email': 'testuser@example.com'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        print("PASSED")
 
     def test_login(self):
         url = reverse('login')
@@ -22,6 +23,7 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access', response.data)
         self.assertIn('refresh', response.data)
+        print("PASSED")
 
 class ProductTests(APITestCase):
     def setUp(self):
@@ -50,8 +52,8 @@ class ProductTests(APITestCase):
         url = reverse('product-list')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
         self.assertEqual(len(response.data), 1)
+        print("PASSED")
 
     def test_update_product(self):
         self.authenticate()
@@ -59,12 +61,14 @@ class ProductTests(APITestCase):
         data = {'name': 'Laptop Pro', 'description': 'A professional laptop', 'price': 1500, 'category': self.category.id}
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print("PASSED")
 
     def test_delete_product(self):
         self.authenticate()
         url = reverse('product-detail', args=[self.product.id])
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        print("PASSED")
 
 class OrderTests(APITestCase):
     def setUp(self):
@@ -84,10 +88,11 @@ class OrderTests(APITestCase):
     def test_create_order(self):
         self.authenticate()
         url = reverse('order-create')
-        data = {'products': [self.product.id], 'quantity': 1}
+        data = {'user':self.user.id, 'products': [self.product.id], 'quantity': 1}
         response = self.client.post(url, data, format='json')
         print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        print("PASSED-2")
 
     def test_order_history(self):
         self.authenticate()
@@ -96,5 +101,5 @@ class OrderTests(APITestCase):
         url = reverse('order-history')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
         self.assertEqual(len(response.data), 1)
+        print("PASSED")
